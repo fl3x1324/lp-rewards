@@ -18,11 +18,16 @@ contract LPBadge is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         return "ipfs://";
     }
 
-    function safeMint(address to, string memory uri) public onlyOwner {
+    function safeMint(address to, string memory uri)
+        public
+        onlyOwner
+        returns (uint256)
+    {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
+        return tokenId;
     }
 
     // The following functions are overrides required by Solidity.
@@ -41,5 +46,9 @@ contract LPBadge is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         returns (string memory)
     {
         return super.tokenURI(tokenId);
+    }
+
+    function burnToken(uint256 _tokenId) public onlyOwner {
+        _burn(_tokenId);
     }
 }
